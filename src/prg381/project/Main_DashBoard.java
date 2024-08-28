@@ -138,8 +138,8 @@ public class Main_DashBoard extends javax.swing.JFrame {
                 new Main_DashBoard().setVisible(true);
                 try{
                     db.connect();
-                    db.createTableBooks();
-                    db.createTableBorrowers();
+                    //db.createTableBooks();
+                    //db.createTableBorrowers();
                 }catch (ClassNotFoundException ex){
                     ex.printStackTrace();
                 }
