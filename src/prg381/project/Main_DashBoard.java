@@ -4,6 +4,8 @@
  */
 package prg381.project;
 
+import app.DBConnection;
+
 /**
  *
  * @author nmabe
@@ -78,11 +80,10 @@ public class Main_DashBoard extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tempus Sans ITC", 3, 15)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Please select an option");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 160, 20));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 200, 180, 20));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prg381/project/pexels-photo-1907785.jpeg"))); // NOI18N
-        jLabel5.setText("jLabel5");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, -180, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, -180, 500, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -105,6 +106,8 @@ public class Main_DashBoard extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    public static DBConnection db = new DBConnection();
+ 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -133,6 +136,15 @@ public class Main_DashBoard extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Main_DashBoard().setVisible(true);
+                try{
+                    db.connect();
+                    db.createTableBooks();
+                    db.createTableBorrowers();
+                }catch (ClassNotFoundException ex){
+                    ex.printStackTrace();
+                }
+                
+                
             }
         });
     }
