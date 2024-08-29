@@ -46,8 +46,41 @@ public class DBConnection {
             System.out.println("Table creation failed");
         }
     } 
+        
+public void dropBorrowersTable() {
+    String query = "DROP TABLE Borrowers";
 
-   public void createTableBorrowers(){
+    try (Statement stmt = con.createStatement()) {
+        stmt.executeUpdate(query);
+        System.out.println("Borrowers table deleted successfully");
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        System.out.println("Failed to delete Borrowers table");
+    }
+}
+
+    public void createTableBorrowers() {
+    try (Statement stmt = con.createStatement()) {
+        String query = "CREATE TABLE Borrowers ("
+                + "StudentID INT, "
+                + "BookID INT, "
+                + "StudentName VARCHAR(20), "
+                + "StudentSurname VARCHAR(20), "
+                + "StudentCourse VARCHAR(20), "
+                + "RentalPrice VARCHAR(20), "
+                + "FOREIGN KEY (BookID) REFERENCES Books(BookID), "
+                + "PRIMARY KEY (StudentID, BookID))"; // Composite primary key to ensure unique student-book pairs
+        stmt.executeUpdate(query);
+        System.out.println("Table created");
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        System.out.println("Table creation failed");
+    }
+}
+
+
+
+ /*  public void createTableBorrowers(){
     try (Statement stmt = con.createStatement()) {
         String query = "CREATE TABLE Borrowers ("
                 + "StudentID INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "
@@ -63,7 +96,7 @@ public class DBConnection {
         ex.printStackTrace();
         System.out.println("Table creation failed");
     }
-} 
+} */
 
       
     

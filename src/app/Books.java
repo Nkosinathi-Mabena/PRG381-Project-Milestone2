@@ -21,13 +21,13 @@ public class Books extends Database{
         super();
     }
         public boolean bookExists(int bookID) {
-        String query = "SELECT COUNT(*) FROM Books WHERE BookID = ?";
+        String query = "SELECT COUNT(*) FROM Books WHERE BookID = ?"; //SQL statemnt to select all data from books table
         
         try (PreparedStatement pstmt = con.prepareStatement(query)) {
             pstmt.setInt(1, bookID);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) > 0;
+                return rs.getInt(1) > 0; //this will return 1 / true to indicate book exists
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -59,9 +59,9 @@ public class Books extends Database{
     System.out.println("Book added to database");
 }
     
-    public DefaultTableModel getBooksTableModel() {
+    public DefaultTableModel getBooksTableModel() { //return a tableModel that will be used when viewing datata
         DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"BookID", "Title", "Author", "YearPublished", "Genre", "Price"};
+        String[] columns = {"Book ID", "Title", "Author", "Year Published", "Genre", "Price"};
         model.setColumnIdentifiers(columns);
 
         try {
@@ -89,6 +89,7 @@ public class Books extends Database{
     
         public void updateBook(int bookID, String title, String author, String yearPublished, String genre, String price) {
         String query = "UPDATE Books SET Title = ?, Author = ?, YearPublished = ?, Genre = ?, Price = ? WHERE BookID = ?";
+        //Query to update books
         
         try (PreparedStatement pstmt = con.prepareStatement(query)) {
             pstmt.setString(1, title);

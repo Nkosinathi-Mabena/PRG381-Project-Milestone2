@@ -5,6 +5,8 @@
 package prg381.project;
 
 import app.DBConnection;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -17,6 +19,19 @@ public class Main_DashBoard extends javax.swing.JFrame {
      */
     public Main_DashBoard() {
         initComponents();
+         setTitle("Borrow Management");
+        setSize(490, 520); 
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false); 
+
+        setLocationRelativeTo(null); 
+
+        // code to Prevent maximization
+        addWindowStateListener(e -> {
+            if (e.getNewState() == JFrame.MAXIMIZED_BOTH) {
+                setExtendedState(JFrame.NORMAL);
+            }
+        });
     }
 
     /**
@@ -133,11 +148,15 @@ public class Main_DashBoard extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        SwingUtilities.invokeLater(() -> {
+            new Main_DashBoard().setVisible(true);
+        });
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Main_DashBoard().setVisible(true);
                 try{
                     db.connect();
+                    //db.createTableBorrowers();
                     //db.createTableBooks();
                     //db.createTableBorrowers();
                 }catch (ClassNotFoundException ex){

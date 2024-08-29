@@ -6,11 +6,11 @@ package prg381.project;
 
 import app.Books;
 import app.DBConnection;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-
 /**
- *
  * @author nmabe
  */
 public class Book_Management extends javax.swing.JFrame {
@@ -20,6 +20,47 @@ public class Book_Management extends javax.swing.JFrame {
      */
     public Book_Management() {
         initComponents();
+        
+        setTitle("Borrow Management");
+        setSize(940, 600);  //This will adjust screen size so that user cannot maximize
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false); 
+
+        setLocationRelativeTo(null); 
+
+        // code to Prevent maximization
+        addWindowStateListener(e -> {
+            if (e.getNewState() == JFrame.MAXIMIZED_BOTH) {
+                setExtendedState(JFrame.NORMAL);
+            }
+        });
+        
+        jTable.getSelectionModel().addListSelectionListener(event -> {
+    if (!event.getValueIsAdjusting() && jTable.getSelectedRow() != -1) { //Allow user to populate textfields when they click on a row
+        int selectedRow = jTable.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel) jTable.getModel();
+        
+        int bookID = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+        String title = model.getValueAt(selectedRow, 1).toString();
+        String author = model.getValueAt(selectedRow, 2).toString();
+        String yearPublished = model.getValueAt(selectedRow, 3).toString();
+        String genre = model.getValueAt(selectedRow, 4).toString();
+        String price = model.getValueAt(selectedRow, 5).toString();
+        
+        tfBookID.setText(String.valueOf(bookID));
+        tfTitle.setText(title);
+        tfAuthor.setText(author);
+        tfYearPublished.setText(yearPublished);
+        tfGenre.setText(genre);
+        tfPrice.setText(price);
+    }
+});
+
+        
+        
+        
+        
+        
     }
 
     /**
@@ -51,7 +92,9 @@ public class Book_Management extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -170,7 +213,7 @@ public class Book_Management extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 260, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 260, -1, -1));
 
         jButton3.setBackground(new java.awt.Color(255, 204, 102));
         jButton3.setFont(new java.awt.Font("Tempus Sans ITC", 3, 12)); // NOI18N
@@ -192,16 +235,38 @@ public class Book_Management extends javax.swing.JFrame {
         });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, -1, -1));
 
-        jLabel8.setBackground(new java.awt.Color(204, 153, 0));
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prg381/project/24manguel-superJumbo.jpg"))); // NOI18N
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(-350, -30, 1310, 590));
+        jButton5.setBackground(new java.awt.Color(255, 204, 102));
+        jButton5.setFont(new java.awt.Font("Tempus Sans ITC", 3, 12)); // NOI18N
+        jButton5.setText("Clear");
+        jButton5.setToolTipText("");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 510, -1, -1));
+
+        jButton6.setBackground(new java.awt.Color(255, 204, 102));
+        jButton6.setFont(new java.awt.Font("Tempus Sans ITC", 3, 12)); // NOI18N
+        jButton6.setText("Back");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 510, -1, -1));
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prg381/project/24manguel-superJumbo.jpg"))); // NOI18N
+        jLabel9.setText("jLabel9");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(-460, -260, 1410, 830));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        String title = tfTitle.getText();
+        //
+        String title = tfTitle.getText();//First take data from different data field
         String author = tfAuthor.getText();
         String yearPublished = tfYearPublished.getText();
         String genre = tfGenre.getText();
@@ -213,7 +278,9 @@ public class Book_Management extends javax.swing.JFrame {
         else {
             Books books = new Books();
             books.addBook(title, author, yearPublished, genre, price);
-            JOptionPane.showMessageDialog(this,"Data Added to Database","Confirm!!",JOptionPane.INFORMATION_MESSAGE);      
+                JOptionPane.showMessageDialog(this,"Book Added to Database","Confirm!!",JOptionPane.INFORMATION_MESSAGE);   
+            DefaultTableModel model = books.getBooksTableModel();
+            jTable.setModel(model);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -241,7 +308,9 @@ public class Book_Management extends javax.swing.JFrame {
             Books books = new Books();
             if (books.bookExists(bookID)) {
                 books.updateBook(bookID, title, author, yearPublished, genre, price);
-                JOptionPane.showMessageDialog(this, "Data Updated in Database", "Confirm!!", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Book Updated in Database", "Confirm!!", JOptionPane.INFORMATION_MESSAGE);
+            DefaultTableModel model = books.getBooksTableModel();
+            jTable.setModel(model);
             } else {
                 JOptionPane.showMessageDialog(this, "Book ID does not exist. Please refill the form.", "Error", JOptionPane.ERROR_MESSAGE);
                 clearInputs(); // Call method to clear text fields
@@ -266,10 +335,12 @@ public class Book_Management extends javax.swing.JFrame {
             if (books.bookExists(bookID)) {
                 books.deleteBook(bookID);
                 JOptionPane.showMessageDialog(this, "Book Deleted from Database", "Confirm!!", JOptionPane.INFORMATION_MESSAGE);
-                clearInputs(); // Call method to clear text fields
+                clearInputs(); 
+                DefaultTableModel model = books.getBooksTableModel();
+                jTable.setModel(model);
             } else {
                 JOptionPane.showMessageDialog(this, "Book ID does not exist. Please refill the form.", "Error", JOptionPane.ERROR_MESSAGE);
-                clearInputs(); // Call method to clear text fields
+                clearInputs(); 
             }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Invalid Book ID", "Error", JOptionPane.ERROR_MESSAGE);
@@ -277,7 +348,19 @@ public class Book_Management extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void clearInputs() {
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        clearInputs();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        Main_DashBoard MD = new Main_DashBoard();
+        MD.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void clearInputs() { //function to clear textfields
     tfBookID.setText("");
     tfTitle.setText("");
     tfAuthor.setText("");
@@ -313,6 +396,9 @@ public class Book_Management extends javax.swing.JFrame {
         //</editor-fold>
         DBConnection db = new DBConnection();
         /* Create and display the form */
+        SwingUtilities.invokeLater(() -> {
+            new Book_Management().setVisible(true);
+        });
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Book_Management().setVisible(true);
@@ -325,6 +411,8 @@ public class Book_Management extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -332,7 +420,7 @@ public class Book_Management extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;
